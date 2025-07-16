@@ -11,6 +11,27 @@ let myPlayerId = null;
 let myPlayerNumber = null;
 let players = {};
 
+// Canvas resize function
+function resizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  
+  // Set the actual canvas size (for crisp rendering)
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  
+  // Scale the context to match the device pixel ratio
+  ctx.scale(dpr, dpr);
+  
+  // Set the display size (CSS pixels)
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+}
+
+// Initialize canvas size
+window.addEventListener('load', resizeCanvas);
+window.addEventListener('resize', resizeCanvas);
+
 // Connect to the server
 const socket = io();
 
@@ -28,6 +49,9 @@ socket.on('playerAssignment', (data) => {
   players = data.players;
   
   playerInfoElement.textContent = `You are Player ${myPlayerNumber}`;
+  
+  // Ensure canvas is properly sized before starting
+  resizeCanvas();
   
   // Start the game loop
   gameLoop();
@@ -60,6 +84,9 @@ function handleKeyDown(e) {
   
   let moved = false;
   const player = players[myPlayerId];
+  const canvasRect = canvas.getBoundingClientRect();
+  const gameWidth = canvasRect.width;
+  const gameHeight = canvasRect.height;
   
   switch (e.key) {
     case 'ArrowUp':
@@ -69,7 +96,7 @@ function handleKeyDown(e) {
       }
       break;
     case 'ArrowDown':
-      if (player.y < canvas.height - PLAYER_SIZE) {
+      if (player.y < gameHeight - PLAYER_SIZE) {
         player.y += PLAYER_SPEED;
         moved = true;
       }
@@ -81,7 +108,7 @@ function handleKeyDown(e) {
       }
       break;
     case 'ArrowRight':
-      if (player.x < canvas.width - PLAYER_SIZE) {
+      if (player.x < gameWidth - PLAYER_SIZE) {
         player.x += PLAYER_SPEED;
         moved = true;
       }
@@ -98,8 +125,12 @@ function handleKeyDown(e) {
 
 // Draw function
 function draw() {
+  const canvasRect = canvas.getBoundingClientRect();
+  const gameWidth = canvasRect.width;
+  const gameHeight = canvasRect.height;
+  
   // Clear the canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, gameWidth, gameHeight);
   
   // Draw all players
   Object.keys(players).forEach(id => {

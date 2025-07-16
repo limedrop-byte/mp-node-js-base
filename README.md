@@ -23,9 +23,16 @@ npm install
 ```
 
 2. Start the server:
-```
-npm start
-```
+
+   **For production:**
+   ```
+   npm start
+   ```
+   
+   **For development (with auto-restart):**
+   ```
+   npm run dev
+   ```
 
 3. Open your browser and navigate to:
 ```

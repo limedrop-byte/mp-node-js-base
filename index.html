@@ -5,24 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Multiplayer Canvas Game</title>
   <style>
-    body {
+    * {
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      overflow: hidden;
+      background-color: #000;
     }
     
     #gameContainer {
       position: relative;
-      width: 1000px;
-      height: 1000px;
+      width: 100vw;
+      height: 100vh;
     }
     
     #gameCanvas {
-      border: 1px solid #000;
+      display: block;
       background-color: #f0f0f0;
+      width: 100%;
+      height: 100%;
     }
     
     #message {
@@ -33,15 +38,45 @@
       font-size: 24px;
       font-weight: bold;
       color: #333;
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: rgba(255, 255, 255, 0.9);
       padding: 20px;
       border-radius: 10px;
       display: none;
+      z-index: 10;
+    }
+    
+    #gameTitle {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #333;
+      font-size: 24px;
+      font-weight: bold;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px 15px;
+      border-radius: 8px;
+      z-index: 5;
     }
     
     #instructions {
-      margin-top: 20px;
-      text-align: center;
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: #333;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 15px;
+      border-radius: 8px;
+      z-index: 5;
+    }
+    
+    #instructions p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    
+    #playerInfo {
+      font-weight: bold;
+      color: #0066cc;
     }
     
     .hidden {
@@ -50,16 +85,14 @@
   </style>
 </head>
 <body>
-  <h1>Multiplayer Canvas Game</h1>
-  
   <div id="gameContainer">
-    <canvas id="gameCanvas" width="1000" height="1000"></canvas>
+    <canvas id="gameCanvas"></canvas>
     <div id="message"></div>
-  </div>
-  
-  <div id="instructions">
-    <p>Use arrow keys to move your player</p>
-    <p id="playerInfo">Connecting to server...</p>
+    <div id="gameTitle">Multiplayer Canvas Game</div>
+    <div id="instructions">
+      <p>Use arrow keys to move your player</p>
+      <p id="playerInfo">Connecting to server...</p>
+    </div>
   </div>
   
   <script src="/socket.io/socket.io.js"></script>
